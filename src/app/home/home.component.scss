@@ -12,3 +12,12 @@
   flex-direction: row;
   justify-content: space-around;
 }
+
+.create-observables-buttons {
+  display: flex;
+  flex-wrap: wrap;
+
+  a {
+    margin-right: 1em;
+  }
+}

@@ -1,0 +1,59 @@
+<app-operator-shell [title]="'defer'">
+  <p>
+    Creates a new Observable, but only when an observer subscribes to it.
+    Each time an observer subscribes, create a fresh Observable for it (each
+    observer gets a different instance of the Observable).
+  </p>
+
+  <p>
+    The syntax here is a bit tricky, but still easy to understand. One simply needs to call the
+    defer() method, and as a parameter it takes a function that creates an observable. The example
+    shows how it can be done.
+  </p>
+
+  <p>
+    As an example, we will create two observables that will get the current date/time.
+    The first one will be created using the create operator, while the second one will be
+    created using the defer operator. We will call create and defer at the same time, wait 5
+    seconds, and then subscribe to both. We will then display the resulting date/time value.
+    You will see that the first observable outputs the date/time of the moment that the
+    create operator was called, whereas the second observable outputs the date/time of the moment
+    that the subscription to the observable was made.
+  </p>
+
+  <pre><code>
+  // creating the observables
+  nonDeferredObservable = of(new Date());
+  deferredObservable = defer(() => of(new Date()));
+
+  // timestamp values that will be set by both observable subscriptions
+  nonDeferredObservableValue: Date;
+  deferredObservableValue: Date;
+
+  // subscribing to the observables
+  nonDeferredObservable.subscribe(val => this.nonDeferredObservableValue = val);
+  deferredObservable.subscribe(val => this.deferredObservableValue = val);
+
+  </code></pre>
+  <div class="demo-container">
+    <div>
+      <button mat-raised-button (click)="createObservables()">Create Observables</button>
+      <p style="color: green;">{{observableCreationTimestamp ? 'Observables created: ' + observableCreationTimestamp : 'Click Create Observable to create Observables'}}</p>
+    </div>
+    <div>
+        <button mat-raised-button (click)="subscribeObservables()">Subscribe to Observables</button>
+        <p style="color: red;">{{observableSubscriptionTimestamp ? 'Observables subscribed: ' + observableSubscriptionTimestamp : 'Click Subscribe to Observables to subscribe to Observables'}}</p>
+      </div>
+    <p style="color: green;">
+      Non-deferred Observable value: {{nonDeferredObservableValue ? nonDeferredObservableValue : 'Create and subscribe to observables to run demo'}}
+    </p>
+    <p style="color: red;">
+      Deferred Observable value: {{deferredObservableValue ? deferredObservableValue : 'Create and subscribe to observables to run demo'}}
+    </p>
+  </div>
+
+  <p>
+    In the example above note how the normally created observable emits a timestamp value of when it was
+    created, whereas the defer created observable emits a timestampe value of when it was subscribed to.
+  </p>
+</app-operator-shell>

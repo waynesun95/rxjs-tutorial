@@ -9,13 +9,15 @@ import { HomeComponent } from './home/home.component';
 
 import {MatButtonModule} from '@angular/material/button';
 import { OperatorShellComponent } from './operators/operator-shell.component';
+import { DeferComponent } from './operators/creating/defer/defer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CreateComponent,
     HomeComponent,
-    OperatorShellComponent
+    OperatorShellComponent,
+    DeferComponent
   ],
   imports: [
     BrowserModule,
