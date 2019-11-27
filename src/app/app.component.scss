@@ -1,0 +1,22 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  align-self: center;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+pre {
+  border: 1px solid gray;
+  border-radius: 0.5em;
+  background-color: whitesmoke;
+  width: 100%;
+  overflow-x: scroll;
+}
