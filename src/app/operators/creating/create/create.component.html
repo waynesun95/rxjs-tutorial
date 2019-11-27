@@ -1,0 +1,117 @@
+<app-operator-shell [title]="'create'">
+  <p>
+    This operator allows you to create an Observable from scratch.
+  </p>
+
+  <p>
+    The Create function takes <i>a function that accepts an observer</i>
+    as its parameter (Note that the parameter is not an observer itself,
+    but rather another function that accepts the observer as a parameter).
+    In other words, the function should replicate the behavior of an actual
+    observable. Thus, the function passed in as a parameter should call its
+    observer parameter's <i>next</i> method at least once, and the <i>error</i>
+    or <i>complete</i> method one time only and no other observer method can be
+    called after this.
+  </p>
+
+  <p>
+    To lead off with a simple example, we will create an Observable that will
+    wait five seconds and then emit a single random number when it is subscribed to,
+    and then it will close by calling the observer's complete method
+  </p>
+  <pre><code>
+  {{'
+  // Creating the Observable with the create operator
+  simpleObservable = Observable.create((observer) => {
+    setTimeout(() => {
+      observer.next(Math.floor(Math.random() * 100));
+      observer.complete();
+    }, 5000);
+  });
+
+  // variable we are displaying
+  // this will hold the emitted value when Observable is subscribed to
+  displayedValue: number;
+
+  // Subscribing to the observable
+  simpleObservable.subscribe(val => {
+    this.displayedValue = val;
+  });
+  '}}
+  </code></pre>
+  <div class="demo-container">
+      <button mat-raised-button color="primary" (click)="subscribeSimpleObservable()">Subscribe</button>
+      <p>
+        Value emitted from Observable: {{simpleCreateObservableSubscription ?
+          simpleCreateObservableValue ?
+            simpleCreateObservableValue :
+            'Wait 5 seconds...' :
+          'Click button for demo'
+        }}
+      </p>
+  </div>
+
+  <p>
+      A few things to note about the example above:
+    </p>
+    <ul>
+      <li>
+        The parameter passed to Observable.create() is a function that accepts an observer,
+        and then calls some methods (next, error, and/or complete) of the passed in observer
+      </li>
+      <li>
+        The code in the subscribe() of the Observable is actually an observer. Remember, the format
+        of an observer can look like the following, as long as it at least includes and implements the (next) call:
+        <pre><code>
+  .subscribe(
+    (next) => // handle data (in this case the data is stored in the next variable parameter),
+    (error) => // handle error (in this case the actual error is stored in the error variable parameter),
+    (complete) => // do shit on complete
+  )
+        </code></pre>
+        So, in our case, val is the (next) seen above. Thus in the Observable.create() when
+        observer.next() is called with the random number, val is actually set to that number.
+        The displayed value is then set to val
+      </li>
+    </ul>
+
+  <p>
+    In this example, we create an Observable that will emit a value every 2 seconds.
+    After 5 emitted values (10 seconds) we will call complete on the observer that is
+    passed in the Observable's subscription. We will display the number of emissions, and
+    when it has reached the last one we will display a "Observable complete" text
+  </p>
+  <pre><code>
+  {{'
+  // Creating the Observable with the create operator
+  timerObservable = Observable.create((observer) => {
+    let counter = 0;
+    setInterval(() => {
+      observer.next();
+      counter++;
+      if (counter === 5) {
+        observer.complete();
+      }
+    }, 2000);
+  });
+
+  // variables to display the emit count and whether the Observable is complete
+  timerEmitCount = 0;
+  timerObservableComplete = false;
+
+  // Subscribing to the observable
+  timerObservable.subscribe(
+    () => {
+      this.timerEmitCount++;
+    },
+    () => {},
+    () => this.timerObservableComplete = true
+  );
+  '}}
+  </code></pre>
+  <div class="demo-container">
+    <button mat-raised-button color="primary" (click)="subscribeTimerObservable()">Subscribe</button>
+    <p>Number of values emitted from Observable{{timerSubscription ? ':' : ' (click button for demo):'}} {{timerEmitCount}} {{timerObservableComplete ? 'Observable complete' : ''}}</p>
+  </div>
+
+</app-operator-shell>
