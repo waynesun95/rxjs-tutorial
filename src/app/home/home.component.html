@@ -70,14 +70,14 @@
         </li>
     </ol>
     <pre><code>
-      // Example
-      // onNext is our observer; it takes in some data and logs it to the console
-      let onNext = (data) => console.log(data);
-      // assuming we have some observable called myObservable, the following will
-      // subscribe our onNext observer to the myObservable. onNext will be called
-      // whenever myObservable emits a value. In this case, onNext will console log
-      // the value whenever it is emitted
-      myObservable.subscribe(onNext);
+  // Example
+  // onNext is our observer; it takes in some data and logs it to the console
+  let onNext = (data) => console.log(data);
+  // assuming we have some observable called myObservable, the following will
+  // subscribe our onNext observer to the myObservable. onNext will be called
+  // whenever myObservable emits a value. In this case, onNext will console log
+  // the value whenever it is emitted
+  myObservable.subscribe(onNext);
     </code></pre>
 
     <p>
@@ -112,16 +112,30 @@
       has emitted its last value):
     </p>
     <pre><code>
-        // Example
-        // next is our observer that implements the onNext functionality
-        let next = (data) => console.log(data);
-        // error is our observer that implements the onError functionality
-        let error = (err) => console.log(err);
-        // complete is our observer that implements the onComplete functionality
-        let complete = () => console.log('Observable stream completed!');
-        // attaching all three to our observable
-        myObservable.subscribe(next, error, complete);
-      </code></pre>
+  // Example
+  // next is our observer that implements the next functionality
+  let next = (data) => console.log(data);
+  // error is our observer that implements the error functionality
+  let error = (err) => console.log(err);
+  // complete is our observer that implements the complete functionality
+  let complete = () => console.log('Observable stream completed!');
+  // attaching all three to our observable
+  myObservable.subscribe(next, error, complete);
+    </code></pre>
+
+    <p>The form of the usage of the above observers that you may be more familiar with is the following:</p>
+    <pre><code>
+  .subscribe(
+    (next) => //do shit,
+    (error) => //do shit,
+    (complete) => //do shit
+  )
+    </code></pre>
+    <p>
+      When calling subscribe, the first parameter is the implementation of onNext. This will be called whenever
+      the observer's next() method is called. (error) and (complete) behave exaclty the same, just when the observer's
+      error and complete method is called respectively.
+    </p>
   </section>
 
   <section class="operators-section" id="operators">
@@ -139,15 +153,15 @@
       observables:
     </p>
     <pre><code>
-      // example
-      // subscribe to an observable and only return emitted values that equal 2,
-      // and then multiple the value by 2 before returning it.
-      // the subscribe takes the result of these chained operators
-      // (in this case it is always going to be 4) and console logs it
-      myObservable.pipe(
-        filter(val => val === 2),
-        map(val => val * 2)
-      ).subscribe(val => console.log(val))
+  // example
+  // subscribe to an observable and only return emitted values that equal 2,
+  // and then multiple the value by 2 before returning it.
+  // the subscribe takes the result of these chained operators
+  // (in this case it is always going to be 4) and console logs it
+  myObservable.pipe(
+    filter(val => val === 2),
+    map(val => val * 2)
+  ).subscribe(val => console.log(val))
     </code></pre>
 
     <p>
