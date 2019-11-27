@@ -1,0 +1,159 @@
+<section class="header" #header>
+    <h1>RxJS Observables and Operators</h1>
+    <div class="nav-links">
+      <a href="#introduction">Introduction</a>
+      <a href="#observables">Observables and Observers</a>
+      <a href="#operators">Operators</a>
+    </div>
+  </section>
+
+  <section class="introduction-section" id="introduction">
+    <h2>Introduction</h2>
+    <p>
+        An <b>Observer </b> <i>subscribes</i> to an <b>Observable</b>.
+        The <b>Observer</b> reacts whenever the <b>Observable </b> <i>emits</i>
+        an item or a sequence of items. Furthermore, <b>Operators</b> are provided to
+        take actions and/or manipulate the data that is emitted from the <b>Observable</b>
+        before
+    </p>
+
+    <p>
+      For example, imagine you are an oompa loompa working in Willie Wonka's
+      chocolate factory. You are stationed at a conveyor belt where freshly made
+      chocolates are being sent out from the chocolate making-machine. Your job is to
+      collect the chocolates and deliver them to another part of the factory for more handling.
+      However, before you deliver them you need to filter out the bad ones and wrap the good ones
+      in the Willie Wonka brand chocolate wrapper.
+      <br/>
+      In this case, you could think of the chocolate making-machine as an <b>Observable</b>
+      that is <i>emitting</i> chocolate bars. You are the <b>Observer</b> that is <i>subscribing</i>
+      to the chocolate-making machine, waiting on a chocolate bar or a sequence of chocolate bars
+      to come through before taking action. The process of filtering out the bad ones and wrapping up the
+      good ones before delivering them can be thought of as the <b>Operators</b> being used to manipulate
+      the data/chocolate (the actual act of filtering out and wrapping would be handled by operator(s)).
+    </p>
+
+    <p>
+      From the <a href="http://reactivex.io/documentation/observable.html">RxJs</a> documentation:
+      "... you define a mechanism for retrieving and transforming the data, in the form of an “Observable,”
+      and then subscribe an observer to it, at which point the previously-defined mechanism fires into
+      action with the observer standing sentry to capture and respond to its emissions whenever they are ready...
+      An observer subscribes to an Observable. An Observable emits items or sends notifications to its observers
+      by calling the observers’ methods."
+    </p>
+  </section>
+
+  <section class="observables-section" id="observables">
+    <h2>Observables and Observers</h2>
+    <p>
+      As mentioned above, an observer subscribes to an Observable. An
+      Observable emits items/sends notifications to its observers by calling
+      the observers' methods (more than one observer can subscribe to a single observable).
+      <br/>
+      <br/>
+      The flow goes something like this (paraphrased from <a href="http://reactivex.io/documentation/observable.html">RxJs</a> documentation):
+    </p>
+    <ol>
+        <li>
+          Define a method that does something useful with the return value of an asynchronous call
+          (Observables return asynchronous values). This method will be part of the observer
+        </li>
+        <li>
+          Define the asynchronous call itself as an Observable
+        </li>
+        <li>
+          Attach the observer to the Observerable by subscribing it
+        </li>
+        <li>
+          Now whenever items are emitted by the Observable, the observable method will run
+          with the emitted items passed to it
+        </li>
+    </ol>
+    <pre><code>
+      // Example
+      // onNext is our observer; it takes in some data and logs it to the console
+      let onNext = (data) => console.log(data);
+      // assuming we have some observable called myObservable, the following will
+      // subscribe our onNext observer to the myObservable. onNext will be called
+      // whenever myObservable emits a value. In this case, onNext will console log
+      // the value whenever it is emitted
+      myObservable.subscribe(onNext);
+    </code></pre>
+
+    <p>
+      Observers can implement one of the following methods:
+    </p>
+    <ul>
+      <li>
+        <b>onNext</b>
+        <p>
+          Observable calls this whenever it emits an item. Can be called zero or more times
+        </p>
+      </li>
+      <li>
+        <b>onError</b>
+        <p>
+          Observable calls this if there was an error generating the expected data.
+          This method as a parameter takes what caused the error. Can be called once;
+          when it is called the Observable stream closes
+        </p>
+      </li>
+      <li>
+        <b>onCompleted</b>
+        <p>
+          Observable calls this after it has called onNext for the final time (no more values to emit)
+          Can be called once; when it is called the Observable stream is complete and closes.
+        </p>
+      </li>
+    </ul>
+    <p>
+      When subscribing to an Observable, you can attach all three types of observers to handle all
+      situations (when a value is emitted, when there is an error emitting a value, and when the Observable
+      has emitted its last value):
+    </p>
+    <pre><code>
+        // Example
+        // next is our observer that implements the onNext functionality
+        let next = (data) => console.log(data);
+        // error is our observer that implements the onError functionality
+        let error = (err) => console.log(err);
+        // complete is our observer that implements the onComplete functionality
+        let complete = () => console.log('Observable stream completed!');
+        // attaching all three to our observable
+        myObservable.subscribe(next, error, complete);
+      </code></pre>
+  </section>
+
+  <section class="operators-section" id="operators">
+    <h2>Operators</h2>
+    <p>
+      Most operators operate on an Observable and return an Observable.
+      They can be chained one after another; each operator in the chain
+      modifies the Observable that resulted from the previous operator.
+      Thus, <i>order matters</i>.
+    </p>
+
+    <p>
+      We use the <code>pipe()</code> method to chain operators together
+      before subscribing to the Observable that resulted from the chained
+      observables:
+    </p>
+    <pre><code>
+      // example
+      // subscribe to an observable and only return emitted values that equal 2,
+      // and then multiple the value by 2 before returning it.
+      // the subscribe takes the result of these chained operators
+      // (in this case it is always going to be 4) and console logs it
+      myObservable.pipe(
+        filter(val => val === 2),
+        map(val => val * 2)
+      ).subscribe(val => console.log(val))
+    </code></pre>
+
+    <p>
+      Below are the RxJS operators available for use.
+      The commonly used ones are highlighted in green.
+    </p>
+
+    <h2>Operators to Create Observables</h2>
+  </section>
